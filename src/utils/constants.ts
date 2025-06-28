@@ -25,6 +25,6 @@ export const SignInDefaultValues = {
 export const AddNewComplaintDefaultValues = {
   location: "",
   description: "",
-  photo: "",
+  photo: null,
   status: false,
 };

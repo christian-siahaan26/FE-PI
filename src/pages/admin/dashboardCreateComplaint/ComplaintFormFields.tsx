@@ -48,14 +48,22 @@ export default function ComplaintFormFields({
       <FormField
         control={form.control}
         name="photo"
-        render={({ field }) => (
+        render={({
+          field: { onChange, name, value },
+          fieldState: { error },
+        }) => (
           <FormItem>
             <FormLabel>Photo</FormLabel>
             <FormControl>
               <Input
                 type="file"
+                name={name}
                 accept="image/*"
-                onChange={(e) => field.onChange(e.target.files)}
+                onChange={(e) => {
+                  const files = e.target.files;
+                  console.log("Files selected:", files); // Debug log
+                  onChange(files); // Kirim FileList ke form
+                }}
                 className="block w-full text-sm text-gray-700 bg-white border border-gray-300 rounded-md"
               />
             </FormControl>

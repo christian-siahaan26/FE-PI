@@ -39,13 +39,23 @@ export default function TableList({
         <TableCell className="w-[100px]">{complaint.name}</TableCell>
         <TableCell className="w-[100px]">{complaint.location}</TableCell>
         <TableCell className="w-[100px]">{complaint.description}</TableCell>
-        <TableCell className="w-[100px]">{complaint.photo}</TableCell>
+        <TableCell className="w-[100px]">
+          {complaint.photo ? (
+            <img
+              src={complaint.photo}
+              alt="Complaint photo"
+              className="w-16 h-16 object-cover rounded"
+            />
+          ) : (
+            <span className="text-gray-500">No photo</span>
+          )}
+        </TableCell>
         <TableCell
           className={`w-[100px]  font-semibold uppercase ${
             complaint.status == false ? "text-red-700" : "text-green-700"
           }`}
         >
-          {complaint.status == false ? "not present" : "present"}
+          {complaint.status == false ? "not complete" : "complete"}
         </TableCell>
         <TableCell className="w-[100px] flex gap-2 items-center">
           <i

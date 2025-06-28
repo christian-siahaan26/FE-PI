@@ -11,7 +11,7 @@ export default function usePath() {
         setPageName("Dashboard");
         break;
       case "/dashboard/create":
-        setPageName("Add Guest");
+        setPageName("Add Complaint");
         break;
       case "/dashboard/profile":
         setPageName("Profile");

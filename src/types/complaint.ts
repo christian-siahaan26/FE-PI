@@ -13,7 +13,7 @@ export type Complaint = {
 export type CreateComplaintDto = {
   location: string;
   description: string;
-  photo: string;
+  photo: File;
   status?: boolean;
 };
 

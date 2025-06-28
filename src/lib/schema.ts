@@ -15,18 +15,6 @@ export const signUpFormSchema = z.object({
 
 export type SignUpFormType = z.infer<typeof signUpFormSchema>;
 
-export const PhonePattern = /^(?:\+62|62|0)8[1-9][0-9]{6,10}$/;
-
-// export const addNewComplaintSchema = z.object({
-//   name: z.string().nonempty("Name is required").min(1, "Name min 3 character"),
-//   no_hp: z
-//     .string()
-//     .nonempty("No_Telp is required")
-//     .min(9, "No_Telp Min 8 Number")
-//     .regex(PhonePattern, "Invalid phone number"),
-//   status_hadir: z.boolean(),
-// });
-
 export const addNewComplaintSchema = z.object({
   location: z
     .string()
@@ -38,25 +26,27 @@ export const addNewComplaintSchema = z.object({
     .max(500, "Description can't be more than 500 characters"),
   photo: z
     .any()
-    .refine((file) => file instanceof FileList && file.length > 0, {
+    .refine((files) => {
+      console.log("Validating photo:", files); // Debug log
+      console.log("Is FileList:", files instanceof FileList);
+      console.log("Length:", files?.length);
+      
+      return files instanceof FileList && files.length > 0;
+    }, {
       message: "Photo is required",
     })
-    .refine((file) => file instanceof FileList && file[0].size < 5_000_000, {
+    .refine((files) => {
+      if (files instanceof FileList && files.length > 0) {
+        return files[0].size < 5_000_000;
+      }
+      return true; // Skip ukuran jika tidak ada file
+    }, {
       message: "File size must be less than 5MB",
     }),
 });
 
 export type AddNewComplaintType = z.infer<typeof addNewComplaintSchema>;
 
-// export const editComplaintSchema = z.object({
-//   name: z.string().nonempty("Name is required").min(1, "Name min 3 character"),
-//   no_hp: z
-//     .string()
-//     .nonempty("No_Telp is required")
-//     .min(9, "No_Telp Min 8 Number")
-//     .regex(PhonePattern, "Invalid phone number"),
-//   status_hadir: z.boolean(),
-// });
 export const editComplaintSchema = z.object({
   location: z
     .string()

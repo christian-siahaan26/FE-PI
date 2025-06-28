@@ -5,7 +5,7 @@ import SignUpPage from "./pages/auth/sign-up";
 import SignInPage from "./pages/auth/sign-in";
 import { R_TOKEN } from "./utils/constants";
 import { AuthProvider } from "./context/auth-context";
-import AddGuestPage from "./pages/admin/dashboardCreateGuest/AddComplaintPage";
+import AddComplaintPage from "./pages/admin/dashboardCreateComplaint/AddComplaintPage";
 import ProfilePage from "./pages/admin/dashboardProfile/Profile";
 import { Toaster } from "./components/ui/sonner";
 import Home from "./pages/client/Home";
@@ -63,7 +63,7 @@ function App() {
             element={
               <DashboardRoute>
                 <DashboardLayout>
-                  <AddGuestPage />
+                  <AddComplaintPage />
                   <Toaster />
                 </DashboardLayout>
               </DashboardRoute>

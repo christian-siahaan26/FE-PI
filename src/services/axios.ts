@@ -15,7 +15,13 @@ axios.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
 
-    config.headers["Content-Type"] = "application/json";
+    // PERBAIKAN: Jangan set Content-Type untuk FormData
+    if (config.data instanceof FormData) {
+      // Browser akan otomatis set Content-Type dengan boundary
+      delete config.headers["Content-Type"];
+    } else {
+      config.headers["Content-Type"] = "application/json";
+    }
 
     return config;
   },
@@ -32,7 +38,7 @@ axios.interceptors.response.use(
       localStorage.removeItem(R_TOKEN);
       localStorage.removeItem("user_data");
 
-      window.location.href = "/auth/sign-in";
+      window.location.href = "/auth/signin";
     }
     return Promise.reject(error);
   }
