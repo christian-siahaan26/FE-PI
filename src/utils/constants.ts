@@ -3,8 +3,8 @@ export const JWT_SECRET =
 
 export const ROUTES = {
   HOME: "/",
-  LOGIN: "/auth/sign-in",
-  REGISTER: "/auth/sign-up",
+  LOGIN: "/auth/signin",
+  REGISTER: "/auth/signup",
   DASHBOARD: "/dashboard",
   CREATE_COMPLAINT: "/dashboard/create",
 };

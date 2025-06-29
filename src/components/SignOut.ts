@@ -15,7 +15,7 @@ const useLogout = () => {
       localStorage.removeItem("user_name");
     }
 
-    navigate("/auth/sign-in", { replace: true });
+    navigate("/auth/signin", { replace: true });
   }, [navigate]);
 
   return logout;

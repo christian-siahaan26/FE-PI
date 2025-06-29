@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import DashboardPage from "./pages/admin/dashboard/Dashboard";
 import DashboardLayout from "./layout/dashboardLayout";
-import SignUpPage from "./pages/auth/sign-up";
-import SignInPage from "./pages/auth/sign-in";
+import SignUpPage from "./pages/auth/signup";
+import SignInPage from "./pages/auth/signin";
 import { R_TOKEN } from "./utils/constants";
 import { AuthProvider } from "./context/auth-context";
 import AddComplaintPage from "./pages/admin/dashboardCreateComplaint/AddComplaintPage";
@@ -23,7 +23,7 @@ function App() {
     if (localStorage.getItem(R_TOKEN) !== null) {
       return children;
     } else if (localStorage.getItem(R_TOKEN) == null) {
-      return <Navigate to={"/auth/sign-in"} />;
+      return <Navigate to={"/auth/signin"} />;
     }
   };
   return (
@@ -32,7 +32,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route
-            path="/auth/sign-up"
+            path="/auth/signup"
             element={
               <LoginRoute>
                 <SignUpPage />
@@ -40,7 +40,7 @@ function App() {
             }
           />
           <Route
-            path="/auth/sign-in"
+            path="/auth/signin"
             element={
               <LoginRoute>
                 <SignInPage />

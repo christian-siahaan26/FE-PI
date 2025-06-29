@@ -32,7 +32,7 @@ const SignUpForm = () => {
     mutate(formData, {
       onSuccess: (data) => {
         if (data.success) {
-          navigate("/auth/sign-in");
+          navigate("/auth/signin");
         }
       },
     });

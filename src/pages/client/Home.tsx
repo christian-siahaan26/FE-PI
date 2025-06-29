@@ -11,8 +11,8 @@ export default function WorkshopPage() {
 
   const { data } = useTotalComplaints();
 
-  const complaints = data?.data || [];
-  const listPhoneNumber = complaints.find((complaint) => complaint.name === phoneNumber);
+  const guests = data?.data || [];
+  const listPhoneNumber = guests.find((guest) => guest.name === phoneNumber);
 
   const checkRegistration = () => {
     setRegistrationStatus(listPhoneNumber ? "Terdaftar" : "Belum Terdaftar");

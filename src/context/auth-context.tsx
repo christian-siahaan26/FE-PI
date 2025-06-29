@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setToken(null);
     setUserEmail(null);
     setUserName(null);
-    navigate("/auth/sign-in");
+    navigate("/auth/signin");
   };
 
   const updateUserName = (newName: string) => {
