@@ -1,5 +1,4 @@
 import ConfirmationModal from "@/components/ConfirmationModal";
-
 import { TableCell, TableRow } from "@/components/ui/table";
 import { useDeleteComplaint } from "@/services/complaints/mutations/soft-delete-complaints";
 import { Complaint } from "@/types/complaint";
@@ -10,12 +9,12 @@ export default function TableList({
   complaint,
   idx,
   onEdit,
-  setSelectedGuestId,
+  setSelectedComplaintId,
 }: {
   complaint: Complaint;
   idx: number;
   onEdit: () => void;
-  setSelectedGuestId: (complaintId: number) => void;
+  setSelectedComplaintId: (complaintId: number) => void;
 }) {
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState(false);
 
@@ -37,7 +36,20 @@ export default function TableList({
       <TableRow className=" text-xs md:text-sm">
         <TableCell className="font-medium w-[100-px]">{idx}</TableCell>
         <TableCell className="w-[100px]">{complaint.name}</TableCell>
-        <TableCell className="w-[100px]">{complaint.location}</TableCell>
+        <TableCell className="w-[100px]">
+          <div className="flex flex-col">
+            <span className="font-medium">{complaint.location}</span>
+            <span className="text-xs text-gray-500 mt-1">
+              {new Date(complaint.createdAt).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </span>
+          </div>
+        </TableCell>
         <TableCell className="w-[100px]">{complaint.description}</TableCell>
         <TableCell className="w-[100px]">
           {complaint.photo ? (
@@ -62,7 +74,7 @@ export default function TableList({
             className="fas fa-edit text-cyan-600 dark:text-cyan-500 hover:text-cyan-800 cursor-pointer"
             onClick={() => {
               onEdit();
-              setSelectedGuestId(complaint.id);
+              setSelectedComplaintId(complaint.id);
             }}
           />
           <i

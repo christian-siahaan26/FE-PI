@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import Logo from "../../assets/guestList-logo.png";
+import Logo from "../../assets/complaintList-logo.png";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import TooltipAside from "./TooltipAside";
 

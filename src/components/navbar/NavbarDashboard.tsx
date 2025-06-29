@@ -1,14 +1,14 @@
 // import { useAuth } from "@/hooks/use-auth";
 import usePath from "@/hooks/usePath";
-import { getUserData } from "@/utils/localStorageHelper";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+// import { getUserData } from "@/utils/localStorageHelper";
+// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/hooks/use-auth";
+// import { useAuth } from "@/hooks/use-auth";
 
 export default function Navbar() {
   const pageName = usePath();
-  const user = getUserData();
-  const profile = useAuth();
+  // const user = getUserData();
+  // const profile = useAuth();
 
   const navigate = useNavigate();
   return (
@@ -21,11 +21,11 @@ export default function Navbar() {
           className="flex items-center gap-2 cursor-pointer"
           onClick={() => navigate("/dashboard")}
         >
-          <p className="font-semibold">{profile?.userName}</p>
-          <Avatar className="w-12 h-12 md:block">
+          {/* <p className="font-semibold">{profile?.userName}</p> */}
+          {/* <Avatar className="w-12 h-12 md:block">
             <AvatarImage src={user.imageUrl} />
             <AvatarFallback>{profile?.userName?.slice(0, 1)}</AvatarFallback>
-          </Avatar>
+          </Avatar> */}
         </div>
       </div>
     </nav>

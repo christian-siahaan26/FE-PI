@@ -15,9 +15,7 @@ axios.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
 
-    // PERBAIKAN: Jangan set Content-Type untuk FormData
     if (config.data instanceof FormData) {
-      // Browser akan otomatis set Content-Type dengan boundary
       delete config.headers["Content-Type"];
     } else {
       config.headers["Content-Type"] = "application/json";
@@ -28,12 +26,10 @@ axios.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response Interceptor: Redirect ke login jika token expired (401)
 axios.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      console.warn("Token expired, redirecting to login...");
 
       localStorage.removeItem(R_TOKEN);
       localStorage.removeItem("user_data");

@@ -6,7 +6,7 @@ export const ROUTES = {
   LOGIN: "/auth/sign-in",
   REGISTER: "/auth/sign-up",
   DASHBOARD: "/dashboard",
-  CREATE_GUEST: "/dashboard/create",
+  CREATE_COMPLAINT: "/dashboard/create",
 };
 
 export const R_TOKEN = "r_token_neo";

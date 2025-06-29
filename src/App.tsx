@@ -6,7 +6,7 @@ import SignInPage from "./pages/auth/sign-in";
 import { R_TOKEN } from "./utils/constants";
 import { AuthProvider } from "./context/auth-context";
 import AddComplaintPage from "./pages/admin/dashboardCreateComplaint/AddComplaintPage";
-import ProfilePage from "./pages/admin/dashboardProfile/Profile";
+// import ProfilePage from "./pages/admin/dashboardProfile/Profile";
 import { Toaster } from "./components/ui/sonner";
 import Home from "./pages/client/Home";
 
@@ -69,7 +69,7 @@ function App() {
               </DashboardRoute>
             }
           />
-          <Route
+          {/* <Route
             path="/dashboard/profile"
             element={
               <DashboardRoute>
@@ -79,7 +79,7 @@ function App() {
                 </DashboardLayout>
               </DashboardRoute>
             }
-          />
+          /> */}
         </Routes>
       </AuthProvider>
     </BrowserRouter>

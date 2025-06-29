@@ -21,7 +21,7 @@ export type UpdateComplaintDto = {
   id: number;
   description?: string;
   location?: string;
-  photo?: string;
+  photo?: File | FileList | null;
   status?: boolean;
 };
 

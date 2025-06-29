@@ -26,7 +26,7 @@ export function authorize() {
   return apiResolver<Response<token>>(() => axios.post("/auth/authorize"));
 }
 
-// Guests
+// Complaints
 const getComplaints = (
   page: number = 1,
   limit: number = 10,
@@ -61,33 +61,64 @@ const deleteComplaint = async (complaintId: string) => {
 
 const createComplaints = (payload: CreateComplaintDto) => {
   const formData = new FormData();
-
-  // Append text fields
   formData.append("location", payload.location);
   formData.append("description", payload.description);
 
-  // Append file - pastikan payload.photo adalah File
   if (payload.photo instanceof File) {
     formData.append("photo", payload.photo);
   } else {
-    console.error("Photo harus berupa File object");
     return Promise.reject(new Error("Invalid file format"));
   }
 
-  // PENTING: Kirim formData, bukan payload
   return apiResolver<Response<Complaint>>(() =>
     axios.post("/complaints", formData, {
-      headers: {
-        // Hapus Content-Type, biarkan browser set otomatis untuk FormData
-        // "Content-Type": "multipart/form-data", // JANGAN set manual
-      },
+      headers: {},
     })
   );
 };
 
+const hasNewPhotoToUpload = (photo: any): boolean => {
+  if (!photo) return false;
+  if (photo instanceof File) return true;
+  if (photo instanceof FileList && photo.length > 0) return true;
+  return false;
+};
+
+const getFileFromPhoto = (photo: any): File | null => {
+  if (photo instanceof File) return photo;
+  if (photo instanceof FileList && photo.length > 0) return photo[0];
+  return null;
+};
+
 const updateComplaint = (payload: UpdateComplaintDto) => {
-  return apiResolver<Response<UpdateComplaintDto>>(() =>
-    axios.put(`/complaints/${payload.id}`, payload)
+  const formData = new FormData();
+
+  if (payload.location !== undefined) {
+    formData.append("location", payload.location);
+  }
+
+  if (payload.description !== undefined) {
+    formData.append("description", payload.description);
+  }
+
+  if (payload.status !== undefined) {
+    formData.append("status", payload.status.toString());
+  }
+
+  const hasNewPhoto = hasNewPhotoToUpload(payload.photo);
+  if (hasNewPhoto) {
+    const file = getFileFromPhoto(payload.photo);
+    if (file) {
+      formData.append("photo", file);
+    }
+  } else {
+    console.log("No new photo - keeping existing photo");
+  }
+
+  return apiResolver<Response<Complaint>>(() =>
+    axios.put(`/complaints/${payload.id}`, formData, {
+      headers: {},
+    })
   );
 };
 

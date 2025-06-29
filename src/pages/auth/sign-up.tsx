@@ -1,5 +1,5 @@
 import SignUpForm from "@/components/form/auth/SignUpForm";
-import Logo from "../../assets/guestList-logo.png";
+import Logo from "../../assets/complaintList-logo.png";
 
 const SignUpPage = () => {
   return (
@@ -7,7 +7,7 @@ const SignUpPage = () => {
       <div className="mb-8 flex">
         <img src={Logo} alt="Workify logo" className="inline-block w-20" />
         <span className="text-2xl font-semibold text-slate-800 ml-2">
-          Guest List App
+          Complaint List App
         </span>
       </div>
       <div className="w-full max-w-md space-y-6 rounded-2xl bg-white p-8 shadow-[6px_6px_0px_black] border-4 border-black">

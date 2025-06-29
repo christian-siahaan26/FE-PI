@@ -60,15 +60,15 @@ export default function DashboardPage() {
 
   const complaints = data?.data || [];
   const complaintsComplete = dataCompleteComplaint?.data || [];
-  const totalGuestRegist = dataTotalComplaint?.data || [];
+  const totalComplaintRegist = dataTotalComplaint?.data || [];
 
   const [isOpenEditModal, setIsOpenEditModal] = useState<boolean>(false);
-  const [selectedGuestId, setSelectedComplaintId] = useState<number>(0);
+  const [selectedComplaintId, setSelectedComplaintId] = useState<number>(0);
 
   const completeComplaints = complaintsComplete.filter(
     (complaint) => complaint.status === true
   ).length;
-  const totalGuestRegister = totalGuestRegist.length;
+  const totalComplaintRegister = totalComplaintRegist.length;
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {
@@ -97,7 +97,7 @@ export default function DashboardPage() {
             Total complaints
           </span>
           <span className="font-bold text-sky-700 text-sm md:text-base">
-            {totalGuestRegister}
+            {totalComplaintRegister}
           </span>
         </div>
         <div className="card w-30 h-25 md:w-40 md:h-35 flex flex-col items-center bg-yellow-100 py-5 rounded-lg">
@@ -114,8 +114,8 @@ export default function DashboardPage() {
         <div className="flex flex-row items-center md:space-x-8 space-x-2 mb-5">
           <h1 className="font-bold text-sm">List Complaints</h1>
           <Input
-            className="md:w-45 w-30"
-            placeholder="Search Name | Location"
+            className="md:w-55 w-30"
+            placeholder="Search Location | Description"
             value={searchComplaint}
             onChange={(e) => setSearchComplaint(e.target.value)}
           />
@@ -153,7 +153,7 @@ export default function DashboardPage() {
                 complaint={complaint}
                 idx={(currentPage - 1) * limit + idx + 1}
                 onEdit={() => setIsOpenEditModal(true)}
-                setSelectedGuestId={setSelectedComplaintId}
+                setSelectedComplaintId={setSelectedComplaintId}
               />
             ))
           ) : (
@@ -209,7 +209,7 @@ export default function DashboardPage() {
         <EditComplaintForm
           open={isOpenEditModal}
           setOpen={setIsOpenEditModal}
-          complaintId={selectedGuestId}
+          complaintId={selectedComplaintId}
         />
       )}
     </div>

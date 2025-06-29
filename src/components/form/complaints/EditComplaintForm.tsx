@@ -24,7 +24,7 @@ import { editComplaintSchema, EditComplaintType } from "@/lib/schema";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { useComplaintById } from "@/services/complaints/mutations/use-complaintId";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useUpdateComplaint } from "@/services/complaints/mutations/use-update-complaint";
 
 export default function EditComplaintForm({
@@ -37,48 +37,60 @@ export default function EditComplaintForm({
   complaintId: number;
 }) {
   const { data, isLoading } = useComplaintById(complaintId);
+  const [currentPhoto, setCurrentPhoto] = useState<string>("");
 
   const form = useForm<z.infer<typeof editComplaintSchema>>({
     resolver: zodResolver(editComplaintSchema),
     defaultValues: {
       location: "",
       description: "",
-      photo: "",
+      photo: null,
       status: false,
     },
   });
 
   useEffect(() => {
-    if (data?.data) {
+    if (data?.data && open) {
+      setCurrentPhoto(data.data.photo || "");
+      
       form.reset({
         location: data.data.location || "",
         description: data.data.description || "",
-        photo: data.data.photo || "",
-        status: data.data.status || false,
+        photo: null,
+        status: Boolean(data.data.status),
       });
     }
-  }, [data?.data, form]);
+  }, [data?.data, form, open]);
 
   const { mutate, isPending, error } = useUpdateComplaint();
 
   function onSubmit(formData: EditComplaintType) {
-    mutate(
-      { id: complaintId, ...formData },
-      {
-        onSuccess: (data) => {
-          if (data.success) {
-            toast.success(data.message);
-            form.reset();
-            setOpen(false);
-          }
-        },
-        onError: (data) => {
-          toast.error(
-            data.message || "Failed to create complaint. Please try again!"
-          );
-        },
-      }
-    );
+    const submitData: any = {
+      id: complaintId,
+      location: formData.location,
+      description: formData.description,
+      status: formData.status,
+    };
+
+    if (formData.photo && 
+        ((formData.photo instanceof FileList && formData.photo.length > 0) || 
+         formData.photo instanceof File)) {
+      submitData.photo = formData.photo;
+    }
+
+    mutate(submitData, {
+      onSuccess: (data) => {
+        if (data.success) {
+          toast.success(data.message);
+          setOpen(false);
+        }
+      },
+      onError: (error) => {
+        toast.error(
+          error.message || "Failed to update complaint. Please try again!"
+        );
+      },
+    });
   }
 
   if (isLoading) {
@@ -89,94 +101,110 @@ export default function EditComplaintForm({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
+          <DialogTitle>Edit Complaint</DialogTitle>
           <DialogDescription>
             Make changes to complaint data here. Click save when you're done.
           </DialogDescription>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <FormField
-                control={form.control}
-                name="location"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Location</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Location" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Desctription</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Desctription" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="photo"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Photo</FormLabel>
-                    <FormControl>
+        </DialogHeader>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <FormField
+              control={form.control}
+              name="location"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Location</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Location" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Description" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="photo"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Photo (Optional - leave empty to keep current photo)</FormLabel>
+                  <FormControl>
+                    <div className="space-y-2">
                       <Input
                         type="file"
                         accept="image/*"
-                        onChange={(e) => field.onChange(e.target.files)}
+                        onChange={(e) => {
+                          const files = e.target.files;
+                          field.onChange(files);
+                        }}
                         className="block w-full text-sm text-gray-700 bg-white border border-gray-300 rounded-md"
                       />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="status"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Is Complete?</FormLabel>
-                    <FormControl>
-                      <div className="flex items-center gap-2 capitalize">
-                        <Checkbox
-                          checked={!!field.value}
-                          onCheckedChange={(checked) =>
-                            field.onChange(!!checked)
-                          }
-                        />
-                        <span>yes</span>
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div>
-                <Button
-                  type="submit"
-                  className="w-full cursor-pointer"
-                  disabled={isPending}
-                >
-                  {isPending ? "Submitting.." : "Submit"}
-                </Button>
-                {error && (
-                  <p className="text-red-500 text-center mt-3">
-                    {error.message}
-                  </p>
-                )}
-              </div>
-            </form>
-          </Form>
-        </DialogHeader>
+
+                      {currentPhoto && (
+                        <div className="mt-2">
+                          <p className="text-sm text-gray-600 mb-1">Current photo:</p>
+                          <img 
+                            src={currentPhoto} 
+                            alt="Current complaint photo" 
+                            className="w-20 h-20 object-cover rounded border"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Is Complete?</FormLabel>
+                  <FormControl>
+                    <div className="flex items-center gap-2 capitalize">
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={(checked) => {
+                          field.onChange(checked);
+                        }}
+                      />
+                      <span>Yes</span>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div>
+              <Button
+                type="submit"
+                className="w-full cursor-pointer"
+                disabled={isPending}
+              >
+                {isPending ? "Updating..." : "Update Complaint"}
+              </Button>
+              {error && (
+                <p className="text-red-500 text-center mt-3">
+                  {error.message}
+                </p>
+              )}
+            </div>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

@@ -49,8 +49,8 @@ export default function ComplaintFormFields({
         control={form.control}
         name="photo"
         render={({
-          field: { onChange, name, value },
-          fieldState: { error },
+          field: { onChange, name },
+          // fieldState: { error },
         }) => (
           <FormItem>
             <FormLabel>Photo</FormLabel>
