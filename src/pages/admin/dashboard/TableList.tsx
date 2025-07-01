@@ -5,6 +5,9 @@ import { Complaint } from "@/types/complaint";
 import { useState } from "react";
 import { toast } from "sonner";
 
+// Import komponen modal foto yang akan kita buat
+import PhotoModal from "@/components/modals/PhotoModal"; // Nama file bisa kamu sesuaikan, misalnya PhotoModal.tsx
+
 export default function TableList({
   complaint,
   idx,
@@ -17,6 +20,9 @@ export default function TableList({
   setSelectedComplaintId: (complaintId: number) => void;
 }) {
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState(false);
+  // State baru untuk modal foto
+  const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
+  const [currentPhotoUrl, setCurrentPhotoUrl] = useState("");
 
   const { mutate } = useDeleteComplaint();
 
@@ -29,6 +35,18 @@ export default function TableList({
         toast.error("Failed to delete complaint. Please try again!");
       },
     });
+  };
+
+  // Fungsi untuk membuka modal foto
+  const openPhotoModal = (photoUrl: string) => {
+    setCurrentPhotoUrl(photoUrl);
+    setIsPhotoModalOpen(true);
+  };
+
+  // Fungsi untuk menutup modal foto
+  const closePhotoModal = () => {
+    setIsPhotoModalOpen(false);
+    setCurrentPhotoUrl("");
   };
 
   return (
@@ -53,10 +71,12 @@ export default function TableList({
         <TableCell className="w-[100px]">{complaint.description}</TableCell>
         <TableCell className="w-[100px]">
           {complaint.photo ? (
+            // Tambahkan onClick event di sini
             <img
               src={complaint.photo}
               alt="Complaint photo"
-              className="w-16 h-16 object-cover rounded"
+              className="w-16 h-16 object-cover rounded cursor-pointer" // Tambahkan cursor-pointer
+              onClick={() => openPhotoModal(complaint.photo as string)} // Panggil fungsi openPhotoModal
             />
           ) : (
             <span className="text-gray-500">No photo</span>
@@ -91,6 +111,11 @@ export default function TableList({
           description="Are you sure you want to delete this complaint?"
           onConfirm={HandleDelete}
         />
+      )}
+
+      {/* Tambahkan komponen PhotoModal di sini */}
+      {isPhotoModalOpen && (
+        <PhotoModal photoUrl={currentPhotoUrl} onClose={closePhotoModal} />
       )}
     </>
   );
