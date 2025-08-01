@@ -8,7 +8,7 @@ export const signInFormSchema = z.object({
 export type SignInFormType = z.infer<typeof signInFormSchema>;
 
 export const signUpFormSchema = z.object({
-  name: z.string().min(1, "Name is required"),
+  nameCitizen: z.string().min(1, "Name is required"),
   nik: z.string().min(1, "NIK is required"),
   block: z.string().min(1, "Block is required"),
   email: z.string().email(),
