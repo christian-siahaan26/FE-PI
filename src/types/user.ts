@@ -1,5 +1,7 @@
 export type SignUpDTO = {
   name: string;
+  nik: string;
+  block: string;
   email: string;
   password: string;
 };
