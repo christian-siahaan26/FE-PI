@@ -9,7 +9,7 @@ export default function AsideDashboard({ ...props }) {
   return (
     <div {...props}>
       <div
-        onClick={() => navigate("/")}
+        onClick={() => navigate("/dashboard")}
         className="flex flex-col items-center cursor-pointer pt-4"
       >
         <img src={Logo} className="w-25" alt="Flowbite React Logo" />
